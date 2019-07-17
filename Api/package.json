@@ -4,7 +4,7 @@
   "description": "basic api to call mongo db",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "author": "josh",
   "license": "ISC"
