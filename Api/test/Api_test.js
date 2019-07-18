@@ -2,6 +2,7 @@ var chai = require("chai"),
   expect = require("chai").expect,
   chaiHttp = require("chai-http");
 
+// use Chai Http
 chai.use(chaiHttp);
 
 describe("Api HTTP async Tests", () => {
@@ -35,22 +36,31 @@ describe("Api HTTP async Tests", () => {
           throw err;
         });
     });
-  });
-});
 
-describe("Data base API queries", () => {
-  describe("user should be able to add items to the DB via the basket", () => {
-    it("User should be able to all items in basket from data base", done => {
+    it("Should allow user to GET all recent transactions", done => {
       chai
         .request(server)
-        .get("/")
-        .end((err, res) => {
-          expect(res).to.have.a.property("code");
-          expect(res).to.have.status(401);
+        .get("/transactions")
+        .end(res => {
+          expect(res).to.have.a.property("transactions");
+          expect(res).to.have.a.property("price");
+          expect(res).to.be.json;
           done();
         })
         .catch(err => {
           throw err;
+        });
+    });
+
+    it("User should be able to POST transactions", done => {
+      chai
+        .post("/transactions")
+        .type("form")
+        .send({
+          _method: "put",
+          ItemId: 1,
+          ItemName: "GG Vest",
+          Price: "10"
         });
     });
   });

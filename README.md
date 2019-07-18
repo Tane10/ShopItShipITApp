@@ -8,6 +8,9 @@ This is repo containing a full stack dev project. One folder holding a API built
 - [NodeJs](https://nodejs.org/)
 - [Native Base](https://nativebase.io/)
 - [TensorFlow.js](https://www.tensorflow.org/js)
+- [MongoDB](https://www.mongodb.com/)
+- [Mongoose](https://mongoosejs.com/)
+- [GraphQL](https://graphql.org/)
 
 ## The App:
 ShopIt ShipIt is a React native Android app that allows a user to take a picture of a item of clothing, add details such as price, name, then add item to their basket and buy or sell. 
