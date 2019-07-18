@@ -18,5 +18,8 @@
     "chai": "^4.2.0",
     "mocha": "^6.1.4",
     "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "chai-http": "^4.3.0"
   }
 }
