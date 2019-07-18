@@ -4,8 +4,22 @@
   "description": "basic api to call mongo db",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --recursive"
   },
   "author": "josh",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/cli": "^7.5.0",
+    "@babel/core": "^7.5.4",
+    "@babel/node": "^7.5.0",
+    "@babel/preset-env": "^7.5.4",
+    "@babel/register": "^7.4.4",
+    "babel": "^6.23.0",
+    "chai": "^4.2.0",
+    "mocha": "^6.1.4",
+    "nodemon": "^1.19.1"
+  },
+  "dependencies": {
+    "chai-http": "^4.3.0"
+  }
 }
