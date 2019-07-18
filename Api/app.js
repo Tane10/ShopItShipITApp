@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const graphQLHttp = require("express-graphql");
-const { buildSchema } = require("graphql");
+const  buildSchema  = require("graphql").buildSchema;
 
 const app = express();
 
@@ -14,21 +14,30 @@ app.use(
   "/graphql",
   graphQLHttp({
     schema: buildSchema(`
-
     type RootQuery {
+        users: [String!]
 
     }
 
     type RootMutation {
-
+        createUsers(name:String): String
     }
 
-    schema : {
+    schema {
         query: RootQuery
         mutation: RootMutation
     }
     `),
-    rootValue: {}
+    rootValue: {
+      users: () => {
+        return ["jeff", "tom"];
+      },
+      createUsers: (args) => {
+        const userName = args.name;
+        return userName;
+      }
+    },
+    graphiql: true
   })
 );
 
