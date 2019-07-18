@@ -4,7 +4,7 @@
   "description": "basic api to call mongo db",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha --recursive"
   },
   "author": "josh",
   "license": "ISC",
