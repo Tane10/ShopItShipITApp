@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const graphQLHttp = require("express-graphql");
 const buildSchema = require("graphql").buildSchema;
+const mongoose = require("mongoose");
 
 const app = express();
 
@@ -41,7 +42,7 @@ app.use(
 
     type Wallet {
         walletId: ID
-        balance: Int
+        balance: Float
     }
 
     type Item {
@@ -52,7 +53,7 @@ app.use(
     type Basket {
         basketId: ID
         basketItems: [Item]
-        totalPrice: Int
+        totalPrice: Float
     }
 
     type RootMutation {
@@ -65,6 +66,7 @@ app.use(
     }
     `),
     rootValue: {
+      // Resolver functions
       userName: () => {
         return ["jeff", "tom"];
       },
@@ -103,5 +105,16 @@ app.use(
     graphiql: true
   })
 );
-
-app.listen(3000);
+mongoose
+  .connect(
+    `mongodb+srv://${process.env.MONGO_USER}:${
+      process.env.MONGO_PASSWORD
+    }@shopitshipit-e3qmq.mongodb.net/test?retryWrites=true&w=majority`
+  )
+  .then(() => {
+    app.listen(3000);
+    console.log("connected")
+  })
+  .catch(err => {
+    console.log(err);
+  });
