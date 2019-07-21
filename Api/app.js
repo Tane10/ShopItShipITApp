@@ -8,29 +8,51 @@ const app = express();
 // bodyParser middle wear for json
 app.use(bodyParser.json());
 
-/* query
+/* 
+query
 {
   userName
-  userId
+  userId(id: 1){
+    walletId
+    balance
+  }
+  userBasket(id: 1){
+    basketId
+    basketItems{
+      itemId
+      itemName
+    }
+    totalPrice
+  }
 }
-Working Query
 */
 
-// setting the grapthql endpoint and bulding schemea
+// setting the grapthql endpoInt and bulding schemea
 // query is fetch, mutation is to chage data
 app.use(
   "/graphql",
   graphQLHttp({
     schema: buildSchema(`
-    type RootQuery {
+    type Query {
         userName: [String!]
-        userId: ID!
+        userId(id: ID!): Wallet!
+        userBasket(id: ID!): Basket
     }
 
     type Wallet {
-        usersWallet: ID!
-        balance: int
+        walletId: ID
+        balance: Int
+    }
 
+    type Item {
+      itemId: ID
+      itemName: String
+    }
+
+    type Basket {
+        basketId: ID
+        basketItems: [Item]
+        totalPrice: Int
     }
 
     type RootMutation {
@@ -38,7 +60,7 @@ app.use(
     }
 
     schema {
-        query: RootQuery
+        query: Query
         mutation: RootMutation
     }
     `),
@@ -52,6 +74,30 @@ app.use(
       createUsers: args => {
         const userName = args.name;
         return userName;
+      },
+      userBasket: () => {
+        return 1;
+      },
+      walletId: () => {
+        return "2eecc345p";
+      },
+      balance: () => {
+        return 10;
+      },
+      itemId: () => {
+        return "3hh333ecb";
+      },
+      itemName: () => {
+        return "White Vest";
+      },
+      basketId: () => {
+        return 1;
+      },
+      basketItems: () => {
+        return ["White Vest", "jumper", "sandles"];
+      },
+      totalPrice: () => {
+        return 10;
       }
     },
     graphiql: true
