@@ -1,12 +1,20 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const graphQLHttp = require("express-graphql");
-const  buildSchema  = require("graphql").buildSchema;
+const buildSchema = require("graphql").buildSchema;
 
 const app = express();
 
 // bodyParser middle wear for json
 app.use(bodyParser.json());
+
+/* query
+{
+  userName
+  userId
+}
+Working Query
+*/
 
 // setting the grapthql endpoint and bulding schemea
 // query is fetch, mutation is to chage data
@@ -15,7 +23,13 @@ app.use(
   graphQLHttp({
     schema: buildSchema(`
     type RootQuery {
-        users: [String!]
+        userName: [String!]
+        userId: ID!
+    }
+
+    type Wallet {
+        usersWallet: ID!
+        balance: int
 
     }
 
@@ -29,10 +43,13 @@ app.use(
     }
     `),
     rootValue: {
-      users: () => {
+      userName: () => {
         return ["jeff", "tom"];
       },
-      createUsers: (args) => {
+      userId: () => {
+        return 1;
+      },
+      createUsers: args => {
         const userName = args.name;
         return userName;
       }
