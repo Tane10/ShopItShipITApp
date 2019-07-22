@@ -6,13 +6,11 @@ const userSchema = new Schema({
     type: String,
     required: true
   },
-  userId: {
-    type: String,
-    required: true
+  userWalletId: {
+    type: String
   },
-  userBasket: {
-    type: String,
-    required: true
+  userBasketIs: {
+    type: String
   }
 });
 

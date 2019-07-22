@@ -2,18 +2,20 @@ const mongoose = require("mongoose");
 const ItemsSchema = require("./item");
 
 const Schema = mongoose.Schema;
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 const basketSchema = new Schema({
-  basketId: {
-    type: String,
-    required: true
+  basketItems:{
+    itemId: String,
+    itemName: String,
+    itemPrice: Number,
+    default: {}
   },
-  basketItems: [ItemsSchema],
-
   totalPrice: {
-    type: Float32Array,
+    type: Number,
     required: true
   }
-});
+},
+{ minimize: false });
 
 module.exports = mongoose.model("Basket", basketSchema);

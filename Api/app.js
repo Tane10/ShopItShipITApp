@@ -5,30 +5,85 @@ const { buildSchema } = require("graphql");
 const mongoose = require("mongoose");
 
 const User = require("./models/user");
+const Item = require("./models/item");
+const Wallet = require("./models/wallet");
+const Basket = require("./models/Basket");
 
 const app = express();
 // bodyParser middle wear for json
 app.use(bodyParser.json());
 
-// query is fetch, mutation is to chage data
+//#region mutation help
+/*
+mutation{ all the working mutations for creatation
+  createUser(userInput:{userName:"Jeff"}){
+    userName
+    userId
+    userBasket
+  }
+  createItem(itemInput:{itemName:"hat", itemPrice:5.0}){
+    itemName
+    itemPrice
+  }
+  createWallet(walletInput:{balance:100}){
+    balance
+  }
+  createBasket(basketInput:{totalPrice:3.0}){
+    basketItems{
+    	itemName
+      itemPrice
+  }
+    totalPrice
+  }
+}*/
+//#endregion
+
 app.use(
   "/graphql",
   graphQLHttp({
     schema: buildSchema(`
     type User {
         userName: String!
-        userId: String
+        userId: ID
         userBasket: String
+    }
+
+    type Wallet {
+      balance: Float!
+    }
+
+    type Basket {
+      basketItems: Item
+      totalPrice: Float!
+    }
+
+    type Item {
+      itemName: String
+      itemPrice: Float
     }
 
     input UserInput {
       userName: String!
-      userId: String
-      userBasket: String
     } 
 
+    input ItemInput {
+      itemName: String
+      itemPrice: Float
+    }
+
+    input WalletInput {
+      balance: Float!
+    }
+
+    input BasketInput {
+      totalPrice: Float
+    }
+
     type Mutation {
-        createUser(input: UserInput): User
+        createUser(userInput: UserInput): User
+        createItem(itemInput: ItemInput): Item
+        createWallet(walletInput: WalletInput): Wallet
+        createBasket(basketInput: BasketInput): Basket
     }
 
     schema {
@@ -37,24 +92,73 @@ app.use(
     }
     `),
     rootValue: {
+      // Query
       User: () => {
         return user;
       },
+      Item: () => {
+        return item;
+      },
+      wallet: () => {
+        return wallet;
+      },
+      Basket: () => {
+        return basket
+      },
+      // Mutations
       createUser: args => {
         const user = new User({
-          userName: args.input.userName,
-          userId: args.input.userId,
-          userBasket: args.input.userBasket
+          userName: args.userInput.userName
         });
         return user
           .save()
           .then(result => {
-            console.log(result);
-            console.log(user);
-            return result;
+            return { ...result._doc };
           })
           .catch(err => {
-            console.log(err);
+            throw err;
+          });
+      },
+      createItem: args => {
+        const item = new Item({
+          itemName: args.itemInput.itemName,
+          itemPrice: args.itemInput.itemPrice
+        });
+        return item
+          .save()
+          .then(result => {
+            return { ...result._doc };
+          })
+          .catch(err => {
+            throw err;
+          });
+      },
+      createWallet: args => {
+        const wallet = new Wallet({
+          balance: args.walletInput.balance
+        });
+        return wallet
+          .save()
+          .then(result => {
+            console.log(wallet);
+            return { ...result._doc };
+          })
+          .catch(err => {
+            throw err;
+          });
+      },
+      createBasket: args => {
+        const basket = new Basket({
+          basketItem: {},
+          totalPrice: args.basketInput.totalPrice
+        });
+        return basket
+          .save()
+          .then(result => {
+            console.log(result);
+            return { ...result._doc };
+          })
+          .catch(err => {
             throw err;
           });
       }
