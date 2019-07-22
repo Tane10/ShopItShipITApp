@@ -1,12 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const graphQLHttp = require("express-graphql");
-const buildSchema = require("graphql").buildSchema;
+const { buildSchema } = require("graphql");
 const mongoose = require("mongoose");
 
-const app = express();
 const User = require("./models/user");
 
+const app = express();
 // bodyParser middle wear for json
 app.use(bodyParser.json());
 
@@ -42,11 +42,11 @@ app.use(
       },
       createUser: args => {
         const user = new User({
-          userName: args.UserInput.userName,
-          userId: args.UserInput.userId,
-          userBasket: args.UserInput.userBasket
+          userName: args.input.userName,
+          userId: args.input.userId,
+          userBasket: args.input.userBasket
         });
-        user
+        return user
           .save()
           .then(result => {
             console.log(result);
