@@ -5,101 +5,58 @@ const buildSchema = require("graphql").buildSchema;
 const mongoose = require("mongoose");
 
 const app = express();
+const User = require("./models/user");
 
 // bodyParser middle wear for json
 app.use(bodyParser.json());
 
-/* 
-query
-{
-  userName
-  userId(id: 1){
-    walletId
-    balance
-  }
-  userBasket(id: 1){
-    basketId
-    basketItems{
-      itemId
-      itemName
-    }
-    totalPrice
-  }
-}
-*/
-
-// setting the grapthql endpoInt and bulding schemea
 // query is fetch, mutation is to chage data
 app.use(
   "/graphql",
   graphQLHttp({
     schema: buildSchema(`
-    type Query {
-        userName: [String!]
-        userId(id: ID!): Wallet!
-        userBasket(id: ID!): Basket
+    type User {
+        userName: String!
+        userId: String
+        userBasket: String
     }
 
-    type Wallet {
-        walletId: ID
-        balance: Float
-    }
+    input UserInput {
+      userName: String!
+      userId: String
+      userBasket: String
+    } 
 
-    type Item {
-      itemId: ID
-      itemName: String
-    }
-
-    type Basket {
-        basketId: ID
-        basketItems: [Item]
-        totalPrice: Float
-    }
-
-    type RootMutation {
-        createUsers(name:String): String
+    type Mutation {
+        createUser(input: UserInput): User
     }
 
     schema {
-        query: Query
-        mutation: RootMutation
+        query: User
+        mutation: Mutation
     }
     `),
     rootValue: {
-      // Resolver functions
-      userName: () => {
-        return ["jeff", "tom"];
+      User: () => {
+        return user;
       },
-      userId: () => {
-        return 1;
-      },
-      createUsers: args => {
-        const userName = args.name;
-        return userName;
-      },
-      userBasket: () => {
-        return 1;
-      },
-      walletId: () => {
-        return "2eecc345p";
-      },
-      balance: () => {
-        return 10;
-      },
-      itemId: () => {
-        return "3hh333ecb";
-      },
-      itemName: () => {
-        return "White Vest";
-      },
-      basketId: () => {
-        return 1;
-      },
-      basketItems: () => {
-        return ["White Vest", "jumper", "sandles"];
-      },
-      totalPrice: () => {
-        return 10;
+      createUser: args => {
+        const user = new User({
+          userName: args.UserInput.userName,
+          userId: args.UserInput.userId,
+          userBasket: args.UserInput.userBasket
+        });
+        user
+          .save()
+          .then(result => {
+            console.log(result);
+            console.log(user);
+            return result;
+          })
+          .catch(err => {
+            console.log(err);
+            throw err;
+          });
       }
     },
     graphiql: true
@@ -109,11 +66,13 @@ mongoose
   .connect(
     `mongodb+srv://${process.env.MONGO_USER}:${
       process.env.MONGO_PASSWORD
-    }@shopitshipit-e3qmq.mongodb.net/test?retryWrites=true&w=majority`
+    }@shopitshipit-e3qmq.mongodb.net/${
+      process.env.MONGO_DB
+    }?retryWrites=true&w=majority`
   )
   .then(() => {
     app.listen(3000);
-    console.log("connected")
+    console.log("connected");
   })
   .catch(err => {
     console.log(err);
