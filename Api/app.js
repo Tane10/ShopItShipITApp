@@ -6,12 +6,17 @@ const mongoose = require("mongoose");
 
 const User = require("./models/user");
 const Item = require("./models/item");
-// const Wallet = require("./models/wallet");
-// const Basket = require("./models/Basket");
 
 const app = express();
 // bodyParser middle wear for json
 app.use(bodyParser.json());
+
+/*TODO: 
+create mutations:
+- buyItems 
+- sellItems
+
+*/
 
 //#region mutation help
 /*
@@ -42,6 +47,11 @@ app.use(
   "/graphql",
   graphQLHttp({
     schema: buildSchema(`
+    type Root {
+      user: User
+      items: [Items]
+    }
+
     type User {
         _id: ID!
         userName: String!
@@ -51,11 +61,11 @@ app.use(
 
     type Basket {
       _id: ID
-      basketItems: Item
+      basketItems: Items
       totalPrice: Float
     }
 
-    type Item {
+    type Items {
       _id: ID!
       itemName: String
       itemPrice: Float
@@ -70,6 +80,11 @@ app.use(
       itemPrice: Float
     }
 
+    input AddItemsToBasket {
+      userName: String!
+      itemsName: [String!]
+    }
+
     input WalletInput {
       balance: Float!
       userName: String!
@@ -82,27 +97,32 @@ app.use(
 
     type Mutation {
         createUser(userInput: UserInput): User
-        createItem(itemInput: ItemInput): Item
+        createItem(itemInput: ItemInput): Items
+        addItemsToBasket(addItemsToBasket: AddItemsToBasket): [String]
     }
 
     schema {
-        query: User
+        query: Root
         mutation: Mutation
     }
     `),
     rootValue: {
       // Query
       User: () => {
-        return user;
+        return User.find();
       },
-      Item: () => {
-        return item;
-      },
-      wallet: () => {
-        return wallet;
-      },
-      Basket: () => {
-        return basket;
+      Items: () => {
+        return Item.find()
+          .then(items => {
+            return items.map(item => {
+              console.log(item)
+              return { ...item._doc };
+            });
+            console.log(items);
+          })
+          .catch(err => {
+            throw err;
+          });
       },
       // Mutations
       createUser: args => {
@@ -133,6 +153,12 @@ app.use(
             throw err;
           });
       },
+      addItemsToBasket: args => {
+        return Item.find({
+          userName: args.addItemsToBasket.userName,
+          itemName: args.addItemsToBasket.itemName
+        });
+      }
     },
     graphiql: true
   })
