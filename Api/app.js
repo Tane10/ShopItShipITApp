@@ -6,8 +6,8 @@ const mongoose = require("mongoose");
 
 const User = require("./models/user");
 const Item = require("./models/item");
-const Wallet = require("./models/wallet");
-const Basket = require("./models/Basket");
+// const Wallet = require("./models/wallet");
+// const Basket = require("./models/Basket");
 
 const app = express();
 // bodyParser middle wear for json
@@ -43,21 +43,20 @@ app.use(
   graphQLHttp({
     schema: buildSchema(`
     type User {
+        _id: ID!
         userName: String!
-        userId: ID
-        userBasket: String
-    }
-
-    type Wallet {
-      balance: Float!
+        userWallet: Float
+        userBasket: Basket
     }
 
     type Basket {
+      _id: ID
       basketItems: Item
-      totalPrice: Float!
+      totalPrice: Float
     }
 
     type Item {
+      _id: ID!
       itemName: String
       itemPrice: Float
     }
@@ -73,17 +72,17 @@ app.use(
 
     input WalletInput {
       balance: Float!
+      userName: String!
     }
 
     input BasketInput {
+      userName: String!
       totalPrice: Float
     }
 
     type Mutation {
         createUser(userInput: UserInput): User
         createItem(itemInput: ItemInput): Item
-        createWallet(walletInput: WalletInput): Wallet
-        createBasket(basketInput: BasketInput): Basket
     }
 
     schema {
@@ -103,12 +102,13 @@ app.use(
         return wallet;
       },
       Basket: () => {
-        return basket
+        return basket;
       },
       // Mutations
       createUser: args => {
         const user = new User({
-          userName: args.userInput.userName
+          userName: args.userInput.userName,
+          userWallet: args.userInput.userWallet
         });
         return user
           .save()
@@ -133,35 +133,6 @@ app.use(
             throw err;
           });
       },
-      createWallet: args => {
-        const wallet = new Wallet({
-          balance: args.walletInput.balance
-        });
-        return wallet
-          .save()
-          .then(result => {
-            console.log(wallet);
-            return { ...result._doc };
-          })
-          .catch(err => {
-            throw err;
-          });
-      },
-      createBasket: args => {
-        const basket = new Basket({
-          basketItem: {},
-          totalPrice: args.basketInput.totalPrice
-        });
-        return basket
-          .save()
-          .then(result => {
-            console.log(result);
-            return { ...result._doc };
-          })
-          .catch(err => {
-            throw err;
-          });
-      }
     },
     graphiql: true
   })
