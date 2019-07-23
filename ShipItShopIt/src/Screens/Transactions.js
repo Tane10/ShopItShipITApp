@@ -1,39 +1,31 @@
 import { ListItem } from "react-native-elements";
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
+import { StyleSheet, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { Input, Button, Card, Header, Image } from "react-native-elements";
+import { Card , Header} from "react-native-elements";
 
 const list = [
   {
-    name: "Amy Farha",
+    name: "Vest",
     subtitle: "Vice President"
   },
   {
-    name: "Chris Jackson",
+    name: "Hat",
     subtitle: "Vice Chairman"
   },
   {
-    name: "jef jef",
+    name: "Jumper",
     subtitle: "Vice Chairman"
   },
-  {
-    name: "gt git",
-    subtitle: "Vice Chairman"
-  },
-  {
-    name: "hit Jackson",
-    subtitle: "Vice Chairman"
-  },
-  {
-    name: "mug Jackson",
-    subtitle: "Vice Chairman"
-  }
 ];
 class Basket extends Component {
   render() {
     return (
       <View>
+        <Header
+        leftComponent={{icon=<Icon name="arrow-left" size={25}/>}}
+          centerComponent={{ text: "Add Item Form", style: { color: "#fff" } }}
+        />
         <Card>
           {list.map((l, i) => (
             <ListItem
