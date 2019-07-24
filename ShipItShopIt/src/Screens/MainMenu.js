@@ -4,6 +4,9 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Input, Button, Card } from "react-native-elements";
 
 class MainMenu extends Component {
+  static navigationOptions = {
+    header: null
+  };
   render() {
     return (
       <Card style={styles.container}>
@@ -13,22 +16,34 @@ class MainMenu extends Component {
         <Button
           title="Add Clothing Item"
           type="clear"
-          icon={<Icon name="plus" size={25}  />}
+          icon={<Icon name="plus" size={25} />}
+          onPress={() => {
+            this.props.navigation.navigate("FormInput");
+          }}
         />
         <Button
           title="Check Basket"
           type="clear"
-          icon={<Icon name="shopping-basket" size={25}  />}
+          icon={<Icon name="shopping-basket" size={25} />}
+          onPress={() => {
+            this.props.navigation.navigate("Basket");
+          }}
         />
         <Button
           title="Check History"
           type="clear"
-          icon={<Icon name="history" size={25}  />}
+          icon={<Icon name="history" size={25} />}
+          onPress={() => {
+            this.props.navigation.navigate("Transactions");
+          }}
         />
         <Button
           title="Log Out"
           type="clear"
-          icon={<Icon name="sign-out" size={25}  />}
+          icon={<Icon name="sign-out" size={25} />}
+          onPress={() => {
+            this.props.navigation.navigate("Login");
+          }}
         />
       </Card>
     );

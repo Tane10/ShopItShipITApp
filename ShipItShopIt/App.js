@@ -1,65 +1,29 @@
-import { ListItem } from "react-native-elements";
 import React, { Component } from "react";
-import { StyleSheet, Text, View, ActivityIndicator } from "react-native";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Input, Button, Card, Header, Image } from "react-native-elements";
+import {} from "react-native";
+import {createStackNavigator, createAppContainer} from "react-navigation" 
+import Login from "./src/Screens/Login"
+import MainMenu from "./src/Screens/MainMenu"
+import FormInput from "./src/Screens/FormInput"
+import Basket from "./src/Screens/Basket"
+import Transactions from "./src/Screens/Transactions"
 
-const list = [
-  {
-    name: "Amy Farha",
-    subtitle: "Vice President"
-  },
-  {
-    name: "Chris Jackson",
-    subtitle: "Vice Chairman"
-  },
-  {
-    name: "jef jef",
-    subtitle: "Vice Chairman"
-  },
-  {
-    name: "gt git",
-    subtitle: "Vice Chairman"
-  },
-  {
-    name: "hit Jackson",
-    subtitle: "Vice Chairman"
-  },
-  {
-    name: "mug Jackson",
-    subtitle: "Vice Chairman"
-  }
-];
-class Basket extends Component {
-  render() {
-    return (
-      <View>
-        <Card>
-          {list.map((l, i) => (
-            <ListItem
-              key={i}
-              leftAvatar={{ source: { uri: l.avatar_url } }}
-              title={l.name}
-              subtitle={l.subtitle}
-            />
-          ))}
-        </Card>
-      </View>
-    );
+
+
+export default class App extends Component{
+  render(){
+    return(
+      <AppContainer uriPrefix='/app' />
+    )
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center"
-  },
-  MenuButton: {
-    width: 300,
-    height: 30,
-    borderRadius: 6
-  }
-});
 
-export default Basket;
+const AppStackNavigator = createStackNavigator({
+  Login: Login,
+  MainMenu: MainMenu,
+  FormInput: FormInput,
+  Basket: Basket,
+  Transactions: Transactions
+})
+
+const AppContainer = createAppContainer(AppStackNavigator);

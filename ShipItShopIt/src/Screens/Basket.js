@@ -35,8 +35,7 @@ class Basket extends Component {
     return (
       <View>
           <Header
-        leftComponent={{icon=<Icon name="arrow-left" size={25}/>}}
-          centerComponent={{ text: "Add Item Form", style: { color: "#fff" } }}
+          centerComponent={{ text: "Basket", style: { color: "#fff" } }}
         />
         <Card>
           {list.map((l, i) => (

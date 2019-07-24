@@ -3,8 +3,10 @@ import { StyleSheet, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Input, Button } from "react-native-elements";
 
-
 class Login extends Component {
+  static navigationOptions = {
+    header: null
+  };
   render() {
     return (
       <View style={styles.container}>
@@ -25,6 +27,7 @@ class Login extends Component {
           type="solid"
           raised={true}
           containerStyle={styles.SubmitButton}
+          onPress={() => this.props.navigation.navigate("MainMenu")}
         />
       </View>
     );
@@ -51,4 +54,4 @@ const styles = StyleSheet.create({
   }
 });
 
- export default Login;
+export default Login;
