@@ -49,20 +49,19 @@ app.use(
     schema: buildSchema(`
     type Root {
       user: User
-      items: [Items]
+      items: Items!
     }
 
     type User {
         _id: ID!
         userName: String!
-        userWallet: Float
+        userWallet: Float 
         userBasket: Basket
     }
 
     type Basket {
-      _id: ID
       basketItems: Items
-      totalPrice: Float
+      totalPrice: Float!
     }
 
     type Items {
@@ -73,6 +72,7 @@ app.use(
 
     input UserInput {
       userName: String!
+      userWallet: Float = 0.0
     } 
 
     input ItemInput {
@@ -86,13 +86,13 @@ app.use(
     }
 
     input WalletInput {
-      balance: Float!
+      balance: Float! = 0.0
       userName: String!
     }
 
     input BasketInput {
       userName: String!
-      totalPrice: Float
+      totalPrice: Float = 0.0
     }
 
     type Mutation {
@@ -109,14 +109,19 @@ app.use(
     rootValue: {
       // Query
       User: () => {
-        return User.find();
+        return User.find()
+          .then(user => {
+            return console.log(user);
+          })
+          .catch(err => {
+            throw err;
+          });
       },
       Items: () => {
-        return Item.find()
+        return Item.find({_id:"5d35d8f692a3d8759e72c2bf"})
           .then(items => {
             return items.map(item => {
-              console.log(item)
-              return { ...item._doc };
+              console.log(item);
             });
             console.log(items);
           })
