@@ -1,7 +1,0 @@
-# Ignore any images within the folder
-*.png
-
-# Ignore the node_modules
-node_modules/
-
-nodemon.json
