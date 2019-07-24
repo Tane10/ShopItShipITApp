@@ -1,19 +1,29 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from "react";
+import {} from "react-native";
+import {createStackNavigator, createAppContainer} from "react-navigation" 
+import Login from "./src/Screens/Login"
+import MainMenu from "./src/Screens/MainMenu"
+import FormInput from "./src/Screens/FormInput"
+import Basket from "./src/Screens/Basket"
+import Transactions from "./src/Screens/Transactions"
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
+
+
+export default class App extends Component{
+  render(){
+    return(
+      <AppContainer uriPrefix='/app' />
+    )
+  }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+
+const AppStackNavigator = createStackNavigator({
+  Login: Login,
+  MainMenu: MainMenu,
+  FormInput: FormInput,
+  Basket: Basket,
+  Transactions: Transactions
+})
+
+const AppContainer = createAppContainer(AppStackNavigator);
